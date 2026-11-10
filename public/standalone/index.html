@@ -1,0 +1,444 @@
+<!DOCTYPE html>
+<html lang="th">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>แบบประเมินความพึงพอใจการอบรม</title>
+  <!-- Tailwind CSS CDN -->
+  <script src="https://cdn.tailwindcss.com"></script>
+  <!-- Google Fonts: Prompt & Plus Jakarta Sans -->
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@500;600;700&family=Prompt:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+  <!-- Canvas Confetti for celebratory submission -->
+  <script src="https://cdn.jsdelivr.net/npm/canvas-confetti@1.9.3/dist/confetti.browser.min.js"></script>
+  
+  <style>
+    body {
+      font-family: 'Prompt', -apple-system, sans-serif;
+    }
+    .score-btn.active {
+      transform: scale(1.05);
+      border-color: #4f46e5;
+      background-color: #4f46e5;
+      color: #ffffff;
+      box-shadow: 0 4px 14px 0 rgba(79, 70, 229, 0.35);
+    }
+  </style>
+</head>
+<body class="bg-slate-50 text-slate-800 min-h-screen pb-12">
+
+  <!-- Mobile Top Header -->
+  <header class="bg-white border-b border-slate-200 sticky top-0 z-30 shadow-xs">
+    <div class="max-w-md mx-auto px-4 py-3 flex items-center justify-between">
+      <div class="flex items-center gap-2.5">
+        <div class="w-8 h-8 rounded-lg bg-indigo-600 text-white flex items-center justify-center font-bold text-sm shadow-xs">
+          ✍️
+        </div>
+        <div>
+          <h1 class="text-sm font-semibold text-slate-900 leading-tight">แบบประเมินความพึงพอใจ</h1>
+          <p class="text-xs text-slate-500">โครงการสัมมนาและฝึกอบรม</p>
+        </div>
+      </div>
+      <span class="text-xs px-2 py-0.5 rounded-full bg-indigo-50 text-indigo-700 font-medium border border-indigo-100">
+        ไม่ระบุตัวตน
+      </span>
+    </div>
+  </header>
+
+  <!-- Main Container -->
+  <main class="max-w-md mx-auto px-4 pt-4">
+
+    <!-- Already Submitted Card (Hidden by default) -->
+    <div id="already-submitted-card" class="hidden bg-white rounded-2xl p-6 border border-slate-200 shadow-sm text-center mb-6">
+      <div class="w-16 h-16 rounded-full bg-emerald-100 text-emerald-600 mx-auto flex items-center justify-center text-3xl mb-3">
+        ✓
+      </div>
+      <h2 class="text-lg font-bold text-slate-900 mb-1">บันทึกข้อมูลเรียบร้อยแล้ว</h2>
+      <p class="text-sm text-slate-600 mb-4">
+        ท่านได้ทำแบบประเมินสำหรับเครื่องนี้แล้ว ขอบพระคุณสำหรับความคิดเห็นที่เป็นประโยชน์อย่างยิ่ง
+      </p>
+      <div class="p-3 bg-slate-50 rounded-xl text-xs text-slate-500 mb-4">
+        ระบบป้องกันการตอบซ้ำ เพื่อความเที่ยงตรงของผลการประเมิน
+      </div>
+      <button id="btn-retest" type="button" class="text-xs text-indigo-600 hover:text-indigo-800 font-medium underline">
+        ต้องการทำแบบประเมินใหม่ (สำหรับทดสอบระบบ)
+      </button>
+    </div>
+
+    <!-- Survey Form -->
+    <form id="survey-form" class="space-y-4">
+
+      <!-- Intro Card -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs">
+        <p class="text-xs text-slate-500 leading-relaxed">
+          กรุณาเลือกคะแนนตามความพึงพอใจจริงของท่าน (1 = น้อยที่สุด, 5 = มากที่สุด) ข้อมูลของท่านจะถูกส่งไปยังหน้าจอสรุปผลของผู้จัดแบบเรียลไทม์
+        </p>
+      </div>
+
+      <!-- Question 1 -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs question-card" data-qid="q1">
+        <div class="flex items-start gap-2.5 mb-3">
+          <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+            1
+          </span>
+          <p class="text-sm font-medium text-slate-900 leading-snug">
+            เนื้อหาและหลักสูตรตรงกับความต้องการและนำไปประยุกต์ใช้ได้จริง
+          </p>
+        </div>
+        <div class="grid grid-cols-5 gap-1.5">
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q1" data-val="1">
+            <span class="text-base mb-0.5">😞</span>
+            <span class="font-bold text-xs">1</span>
+            <span class="text-[10px] text-slate-400">น้อยสุด</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q1" data-val="2">
+            <span class="text-base mb-0.5">🙁</span>
+            <span class="font-bold text-xs">2</span>
+            <span class="text-[10px] text-slate-400">น้อย</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q1" data-val="3">
+            <span class="text-base mb-0.5">😐</span>
+            <span class="font-bold text-xs">3</span>
+            <span class="text-[10px] text-slate-400">ปานกลาง</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q1" data-val="4">
+            <span class="text-base mb-0.5">😊</span>
+            <span class="font-bold text-xs">4</span>
+            <span class="text-[10px] text-slate-400">มาก</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q1" data-val="5">
+            <span class="text-base mb-0.5">🤩</span>
+            <span class="font-bold text-xs">5</span>
+            <span class="text-[10px] text-slate-400">มากสุด</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Question 2 -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs question-card" data-qid="q2">
+        <div class="flex items-start gap-2.5 mb-3">
+          <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+            2
+          </span>
+          <p class="text-sm font-medium text-slate-900 leading-snug">
+            วิทยากรมีความรู้ความสามารถและเทคนิคการถ่ายทอดที่เข้าใจง่าย
+          </p>
+        </div>
+        <div class="grid grid-cols-5 gap-1.5">
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q2" data-val="1">
+            <span class="text-base mb-0.5">😞</span>
+            <span class="font-bold text-xs">1</span>
+            <span class="text-[10px] text-slate-400">น้อยสุด</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q2" data-val="2">
+            <span class="text-base mb-0.5">🙁</span>
+            <span class="font-bold text-xs">2</span>
+            <span class="text-[10px] text-slate-400">น้อย</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q2" data-val="3">
+            <span class="text-base mb-0.5">😐</span>
+            <span class="font-bold text-xs">3</span>
+            <span class="text-[10px] text-slate-400">ปานกลาง</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q2" data-val="4">
+            <span class="text-base mb-0.5">😊</span>
+            <span class="font-bold text-xs">4</span>
+            <span class="text-[10px] text-slate-400">มาก</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q2" data-val="5">
+            <span class="text-base mb-0.5">🤩</span>
+            <span class="font-bold text-xs">5</span>
+            <span class="text-[10px] text-slate-400">มากสุด</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Question 3 -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs question-card" data-qid="q3">
+        <div class="flex items-start gap-2.5 mb-3">
+          <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+            3
+          </span>
+          <p class="text-sm font-medium text-slate-900 leading-snug">
+            การจัดสรรเวลาและการมีส่วนร่วมในกิจกรรมมีความเหมาะสม
+          </p>
+        </div>
+        <div class="grid grid-cols-5 gap-1.5">
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q3" data-val="1">
+            <span class="text-base mb-0.5">😞</span>
+            <span class="font-bold text-xs">1</span>
+            <span class="text-[10px] text-slate-400">น้อยสุด</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q3" data-val="2">
+            <span class="text-base mb-0.5">🙁</span>
+            <span class="font-bold text-xs">2</span>
+            <span class="text-[10px] text-slate-400">น้อย</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q3" data-val="3">
+            <span class="text-base mb-0.5">😐</span>
+            <span class="font-bold text-xs">3</span>
+            <span class="text-[10px] text-slate-400">ปานกลาง</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q3" data-val="4">
+            <span class="text-base mb-0.5">😊</span>
+            <span class="font-bold text-xs">4</span>
+            <span class="text-[10px] text-slate-400">มาก</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q3" data-val="5">
+            <span class="text-base mb-0.5">🤩</span>
+            <span class="font-bold text-xs">5</span>
+            <span class="text-[10px] text-slate-400">มากสุด</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Question 4 -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs question-card" data-qid="q4">
+        <div class="flex items-start gap-2.5 mb-3">
+          <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+            4
+          </span>
+          <p class="text-sm font-medium text-slate-900 leading-snug">
+            สื่อ เอกสารประกอบ และสถานที่/ระบบการอบรมมีคุณภาพ
+          </p>
+        </div>
+        <div class="grid grid-cols-5 gap-1.5">
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q4" data-val="1">
+            <span class="text-base mb-0.5">😞</span>
+            <span class="font-bold text-xs">1</span>
+            <span class="text-[10px] text-slate-400">น้อยสุด</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q4" data-val="2">
+            <span class="text-base mb-0.5">🙁</span>
+            <span class="font-bold text-xs">2</span>
+            <span class="text-[10px] text-slate-400">น้อย</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q4" data-val="3">
+            <span class="text-base mb-0.5">😐</span>
+            <span class="font-bold text-xs">3</span>
+            <span class="text-[10px] text-slate-400">ปานกลาง</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q4" data-val="4">
+            <span class="text-base mb-0.5">😊</span>
+            <span class="font-bold text-xs">4</span>
+            <span class="text-[10px] text-slate-400">มาก</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q4" data-val="5">
+            <span class="text-base mb-0.5">🤩</span>
+            <span class="font-bold text-xs">5</span>
+            <span class="text-[10px] text-slate-400">มากสุด</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Question 5 -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs question-card" data-qid="q5">
+        <div class="flex items-start gap-2.5 mb-3">
+          <span class="w-6 h-6 rounded-full bg-indigo-100 text-indigo-700 text-xs font-bold flex items-center justify-center shrink-0 mt-0.5">
+            5
+          </span>
+          <p class="text-sm font-medium text-slate-900 leading-snug">
+            ความพึงพอใจในภาพรวมต่อการจัดอบรมครั้งนี้
+          </p>
+        </div>
+        <div class="grid grid-cols-5 gap-1.5">
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q5" data-val="1">
+            <span class="text-base mb-0.5">😞</span>
+            <span class="font-bold text-xs">1</span>
+            <span class="text-[10px] text-slate-400">น้อยสุด</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q5" data-val="2">
+            <span class="text-base mb-0.5">🙁</span>
+            <span class="font-bold text-xs">2</span>
+            <span class="text-[10px] text-slate-400">น้อย</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q5" data-val="3">
+            <span class="text-base mb-0.5">😐</span>
+            <span class="font-bold text-xs">3</span>
+            <span class="text-[10px] text-slate-400">ปานกลาง</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q5" data-val="4">
+            <span class="text-base mb-0.5">😊</span>
+            <span class="font-bold text-xs">4</span>
+            <span class="text-[10px] text-slate-400">มาก</span>
+          </button>
+          <button type="button" class="score-btn flex flex-col items-center py-2 px-1 rounded-xl border border-slate-200 bg-slate-50 text-slate-700 hover:bg-slate-100 transition-all text-xs" data-qid="q5" data-val="5">
+            <span class="text-base mb-0.5">🤩</span>
+            <span class="font-bold text-xs">5</span>
+            <span class="text-[10px] text-slate-400">มากสุด</span>
+          </button>
+        </div>
+      </div>
+
+      <!-- Feedback (Optional) -->
+      <div class="bg-white rounded-2xl p-4 border border-slate-200 shadow-xs">
+        <label for="feedback" class="block text-sm font-medium text-slate-900 mb-1">
+          ข้อเสนอแนะเพิ่มเติม (ไม่บังคับ)
+        </label>
+        <p class="text-xs text-slate-500 mb-2">สิ่งที่ท่านประทับใจ หรือข้อที่ควรปรับปรุงเพื่อพัฒนาหลักสูตรต่อไป</p>
+        <textarea id="feedback" rows="3" class="w-full text-sm p-3 border border-slate-200 rounded-xl focus:ring-2 focus:ring-indigo-500 focus:outline-hidden transition-all placeholder:text-slate-400 resize-none" placeholder="พิมพ์ความคิดเห็นของท่านที่นี่..."></textarea>
+      </div>
+
+      <!-- Error banner if not completed -->
+      <div id="validation-error" class="hidden p-3 rounded-xl bg-rose-50 border border-rose-200 text-rose-700 text-xs font-medium text-center">
+        ⚠️ กรุณาเลือกให้ครบทั้ง 5 ข้อก่อนกดส่งแบบประเมิน
+      </div>
+
+      <!-- Submit Button -->
+      <button id="btn-submit" type="submit" class="w-full py-3.5 px-4 bg-indigo-600 hover:bg-indigo-700 active:scale-[0.98] text-white font-medium text-base rounded-2xl shadow-md transition-all flex items-center justify-center gap-2">
+        <span>ส่งแบบประเมินความพึงพอใจ</span>
+        <span>🚀</span>
+      </button>
+
+    </form>
+  </main>
+
+  <!-- Firebase Scripts (v10 modular via CDN script) -->
+  <script type="module">
+    import { initializeApp } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-app.js";
+    import { getDatabase, ref, push, set } from "https://www.gstatic.com/firebasejs/10.9.0/firebase-database.js";
+
+    // ----------------------------------------------------
+    // ⚙️ 1. นำข้อมูล Firebase Config ของท่านมาวางแทนที่ด้านล่างนี้:
+    // (ดูจาก Firebase Console > Project Settings)
+    // ----------------------------------------------------
+    const firebaseConfig = {
+      apiKey: "YOUR_API_KEY",
+      authDomain: "YOUR_PROJECT_ID.firebaseapp.com",
+      databaseURL: "https://YOUR_DATABASE_NAME.asia-southeast1.firebasedatabase.app",
+      projectId: "YOUR_PROJECT_ID",
+      storageBucket: "YOUR_PROJECT_ID.appspot.com",
+      messagingSenderId: "YOUR_SENDER_ID",
+      appId: "YOUR_APP_ID"
+    };
+
+    // ตัวแปรสำหรับตรวจสอบว่าผู้ใช้ใส่ Firebase Config จริงหรือยัง
+    const isFirebaseConfigured = firebaseConfig.databaseURL && !firebaseConfig.databaseURL.includes('YOUR_DATABASE_NAME');
+
+    let db = null;
+    if (isFirebaseConfigured) {
+      try {
+        const app = initializeApp(firebaseConfig);
+        db = getDatabase(app);
+      } catch (e) {
+        console.warn("Firebase Init Error:", e);
+      }
+    }
+
+    // State เก็บคำตอบ
+    const answers = { q1: null, q2: null, q3: null, q4: null, q5: null };
+    const STORAGE_KEY = 'training_survey_submitted_device';
+
+    const form = document.getElementById('survey-form');
+    const alreadySubmittedCard = document.getElementById('already-submitted-card');
+    const validationError = document.getElementById('validation-error');
+    const btnSubmit = document.getElementById('btn-submit');
+    const btnRetest = document.getElementById('btn-retest');
+
+    // ตรวจสอบว่าเคยส่งจากเครื่องนี้หรือยัง
+    function checkPreviousSubmission() {
+      if (localStorage.getItem(STORAGE_KEY)) {
+        form.classList.add('hidden');
+        alreadySubmittedCard.classList.remove('hidden');
+      } else {
+        form.classList.remove('hidden');
+        alreadySubmittedCard.classList.add('hidden');
+      }
+    }
+    checkPreviousSubmission();
+
+    // ปุ่มทดสอบส่งซ้ำได้
+    btnRetest.addEventListener('click', () => {
+      localStorage.removeItem(STORAGE_KEY);
+      // Reset radio buttons
+      document.querySelectorAll('.score-btn').forEach(b => b.classList.remove('active'));
+      Object.keys(answers).forEach(k => answers[k] = null);
+      document.getElementById('feedback').value = '';
+      checkPreviousSubmission();
+    });
+
+    // Handle score button click
+    document.querySelectorAll('.score-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const qid = btn.dataset.qid;
+        const val = parseInt(btn.dataset.val, 10);
+        answers[qid] = val;
+
+        // Reset others in the same question
+        document.querySelectorAll(`.score-btn[data-qid="${qid}"]`).forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+
+        validationError.classList.add('hidden');
+      });
+    });
+
+    // Handle Form Submit
+    form.addEventListener('submit', async (e) => {
+      e.preventDefault();
+
+      // Check if all 5 questions answered
+      const unanswered = Object.keys(answers).filter(k => answers[k] === null);
+      if (unanswered.length > 0) {
+        validationError.classList.remove('hidden');
+        // Scroll to first unanswered question
+        const targetCard = document.querySelector(`.question-card[data-qid="${unanswered[0]}"]`);
+        if (targetCard) targetCard.scrollIntoView({ behavior: 'smooth', block: 'center' });
+        return;
+      }
+
+      btnSubmit.disabled = true;
+      btnSubmit.innerHTML = '<span>กำลังส่งข้อมูล...</span>';
+
+      const feedback = document.getElementById('feedback').value.trim();
+      const payload = {
+        answers: { ...answers },
+        feedback: feedback || null,
+        timestamp: Date.now(),
+        submittedAt: new Date().toISOString()
+      };
+
+      try {
+        if (isFirebaseConfigured && db) {
+          // บันทึกลง Firebase Realtime Database
+          const responsesRef = ref(db, 'responses');
+          const newRef = push(responsesRef);
+          await set(newRef, payload);
+        } else {
+          // ถ้ายังไม่ได้ตั้ง Firebase: ส่งผ่าน BroadcastChannel หรือ LocalStorage เพื่อทดสอบทันที
+          const localList = JSON.parse(localStorage.getItem('training_survey_responses_v1') || '[]');
+          localList.unshift({
+            id: 'resp-' + Date.now(),
+            ...payload
+          });
+          localStorage.setItem('training_survey_responses_v1', JSON.stringify(localList));
+          
+          if (window.BroadcastChannel) {
+            const bc = new BroadcastChannel('training_survey_broadcast');
+            bc.postMessage({ type: 'SYNC_RESPONSES', payload: localList });
+          }
+        }
+
+        // ยิงเอฟเฟกต์พลุฉลอง
+        if (window.confetti) {
+          confetti({ particleCount: 80, spread: 60, origin: { y: 0.7 } });
+        }
+
+        // บันทึกสถานะว่าเครื่องนี้ตอบแล้ว ป้องกันการตอบซ้ำ
+        localStorage.setItem(STORAGE_KEY, 'submitted_' + Date.now());
+
+        setTimeout(() => {
+          checkPreviousSubmission();
+          btnSubmit.disabled = false;
+          btnSubmit.innerHTML = '<span>ส่งแบบประเมินความพึงพอใจ</span><span>🚀</span>';
+        }, 600);
+
+      } catch (err) {
+        alert('เกิดข้อผิดพลาดในการส่งข้อมูล: ' + err.message);
+        btnSubmit.disabled = false;
+        btnSubmit.innerHTML = '<span>ส่งแบบประเมินความพึงพอใจ</span><span>🚀</span>';
+      }
+    });
+  </script>
+</body>
+</html>
